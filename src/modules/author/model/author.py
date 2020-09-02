@@ -17,10 +17,10 @@ class Author(db.Model):
   created = db.Column(db.DateTime, server_default=db.func.now()) 
   books = db.relationship('Book', backref='Author', cascade="all, delete-orphan")
   
-  def __init__(self, first_name, last_name, books = None):
+  def __init__(self, first_name, last_name):
     self.first_name = first_name
     self.last_name = last_name
-    self.books = books
+    self.books = []
   
   def create(self):
     db.session.add(self)
@@ -35,7 +35,6 @@ class AuthorSchema(ModelSchema):
   id = fields.Number(dump_only=True)
   first_name = fields.String(required=True)
   last_name = fields.String(required=True)
-  created = fields.String(dump_only=True)
   books = fields.Nested(
     BookSchema, 
     many=True,

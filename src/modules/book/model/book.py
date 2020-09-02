@@ -6,6 +6,7 @@ from src.config.db import db
 class Book(db.Model):
   __tablename__ = 'books'
 
+  # Set column names
   id = db.Column(
     db.Integer, 
     primary_key=True,

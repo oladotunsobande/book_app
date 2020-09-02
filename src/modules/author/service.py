@@ -4,18 +4,16 @@ from src.modules.author.model.author import Author, AuthorSchema
 
 def create_author(payload):
   try:
+    author = Author(first_name = payload['first_name'], last_name = payload['last_name'])
     author_schema = AuthorSchema()
 
-    author, error = author_schema.loads(payload)
-    result = author_schema.dumps(author.create()).data
+    result = author_schema.dump(author.create())
 
     return set_response(
-      status = 200, 
-      value = { 
-        "success": True,
-        "message": "New author created successfully",
-        "data": result 
-      }
+      status = 'SUCCESS', 
+      success = True,
+      data = result,
+      message = 'New author created successfully'
     )
   except Exception as error:
     raise error
