@@ -24,7 +24,7 @@ def create_author():
 
     validation = schema.validate(payload)
     if validation.get('error') != None and type(validation.get('error')) == str:
-      raise ValidationError(400, validation.get('error'))
+      raise ValidationError('BAD_REQUEST', validation.get('error'))
 
     return authorService.create_author(payload)
   except ValidationError as args:
@@ -37,7 +37,7 @@ def create_author():
     )
   except Exception:
     return set_response(
-      status = 500, 
+      status = 'SERVER_ERROR', 
       success = False,
       error = 'An error occurred'
     )    
