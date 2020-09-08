@@ -16,4 +16,40 @@ def create_author(payload):
       message = 'New author created successfully'
     )
   except Exception as error:
+    print(error)
+    raise error
+
+def get_all_authors(skip, limit):
+  try:
+    temp_skip = int(skip)
+    temp_limit = int(limit)
+
+    authors = Author.query.all().limit(temp_limit).offset(temp_skip)
+    author_schema = AuthorSchema(many=True)
+
+    result = author_schema.dump(authors)
+
+    return set_response(
+      status = 'SUCCESS',
+      success = True,
+      data = result
+    )
+  except Exception as error:
+    print(error)
+    raise error
+
+def get_author(authorId):
+  try:
+    author = Author.query.get(authorId)
+    author_schema = AuthorSchema()
+
+    result = author_schema.dump(author)
+
+    return set_response(
+      status = 'SUCCESS',
+      success = True,
+      data = result
+    )
+  except Exception as error:
+    print(error)
     raise error

@@ -35,3 +35,9 @@ def create_author():
       success = False,
       error = args['error']
     )
+  except Exception:
+    return set_response(
+      status = 500, 
+      success = False,
+      error = 'An error occurred'
+    )    
