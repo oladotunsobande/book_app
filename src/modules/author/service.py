@@ -1,13 +1,12 @@
 from src.config.db import db
 from src.utils.responses import set_response
+from src.modules.repository import Repository
 from src.modules.author.model.author import Author, AuthorSchema
 
 def create_author(payload):
   try:
-    author = Author(first_name = payload['first_name'], last_name = payload['last_name'])
-    author_schema = AuthorSchema()
-
-    result = author_schema.dump(author.create())
+    author_repository = Repository(Author, AuthorSchema())
+    result = author_repository.persist(payload)
 
     return set_response(
       status = 'SUCCESS', 
@@ -38,12 +37,17 @@ def get_all_authors(skip, limit):
     print(error)
     raise error
 
-def get_author(authorId):
+def get_author(author_id):
   try:
-    author = Author.query.get(authorId)
-    author_schema = AuthorSchema()
+    author_repository = Repository(Author, AuthorSchema())
+    result = author_repository.get_one(author_id)
 
-    result = author_schema.dump(author)
+    if(result == None):
+      return set_response(
+        status = 'NOT_FOUND',
+        success = False,
+        error = 'Author record does not exist'
+      )
 
     return set_response(
       status = 'SUCCESS',
